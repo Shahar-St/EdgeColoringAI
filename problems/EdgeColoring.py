@@ -27,11 +27,22 @@ class EdgeColoring:
         self._numOfVertices = numOfVertices
         self._vertices = np.arange(numOfVertices)
 
-    def generateRandomVec(self):
-        raise NotImplementedError
+    # Todo get num of colors and return random vec
+    def generateRandomVec(self, numOfColors):
+        vec = np.arange(self._numOfVertices)
+        return vec.tolist()
 
     def calculateFitness(self, vec):
-        raise NotImplementedError
+        sumOfViolations = 0
+
+        for j in range(self._numOfVertices):
+            color = vec[j]
+            for i in range(self._numOfVertices):
+                if self._graphMatrix[i][j] == 1:
+                    if vec[i] == color:
+                        sumOfViolations += 1
+
+        return sumOfViolations
 
     def translateVec(self, vec):
         return vec
@@ -103,7 +114,7 @@ class EdgeColoring:
 
         return leastConstraintsValue
 
-    def isValidAssignment(self, vertex, wantedAssignment, otherAssignments):
+    def isValidAssignment(self, vertex, wantedAssignment, otherAssignments: dict):
         for i in range(self._numOfVertices):
             if self._graphMatrix[vertex][i] and i in otherAssignments and otherAssignments[i] == wantedAssignment:
                 return False

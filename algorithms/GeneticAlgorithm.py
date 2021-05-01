@@ -24,7 +24,6 @@ class GeneticAlgorithm(Algorithm):
         self._standardDeviation = None
         self._eliteRate = eliteRate
         self._mutationRate = mutationRate
-        self._problem = problem
 
     def findSolution(self, maxIter):
 
