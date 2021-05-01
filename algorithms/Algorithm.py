@@ -28,6 +28,13 @@ class Algorithm(ABC):
                 mutationRate=mutationRate,
             )
 
+        if algoName == 'Backtracking':
+            return algo(
+                problem=problem,
+                popSize=None
+            )
+
+
         else:
             raise Exception('Unknown algorithm')
 

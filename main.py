@@ -15,7 +15,6 @@ def main():
     parser.add_argument('-ps', '--popSize', type=int, default=GA_POP_SIZE)
     parser.add_argument('-t', '--target', default=DEFAULT_TARGET)
 
-
     args = parser.parse_args()
 
     # validate input
@@ -29,7 +28,6 @@ def main():
     target = args.target
     problem = EdgeColoring(args.target)
 
-
     algo = Algorithm.factory(algoName=algoName,
                              popSize=popSize,
                              eliteRate=GA_ELITE_RATE,
@@ -42,9 +40,7 @@ def main():
         '\nRun parameters:\n'
         f'Target: {target}\n'
         f'Algo: {algoName}\n'
-        f'Pop size: {popSize}\n'
     )
-
 
     # find a solution and print it
     solVec = algo.findSolution(GA_MAX_ITER)
