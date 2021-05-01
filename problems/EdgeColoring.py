@@ -1,4 +1,5 @@
 import os
+import random
 
 import numpy as np
 
@@ -27,20 +28,23 @@ class EdgeColoring:
         self._numOfVertices = numOfVertices
         self._vertices = np.arange(numOfVertices)
 
-    # Todo get num of colors and return random vec
     def generateRandomVec(self, numOfColors):
-        vec = np.arange(self._numOfVertices)
+
+        vec1 = np.arange(numOfColors)
+        vec2 = np.random.randint(numOfColors, size=self._numOfVertices-numOfColors)
+        vec = vec1 + vec2
+        np.random.shuffle(vec)
+
         return vec.tolist()
+
 
     def calculateFitness(self, vec):
         sumOfViolations = 0
 
         for j in range(self._numOfVertices):
-            color = vec[j]
             for i in range(self._numOfVertices):
-                if self._graphMatrix[i][j] == 1:
-                    if vec[i] == color:
-                        sumOfViolations += 1
+                if self._graphMatrix[i][j] and vec[i] == vec[j]:
+                    sumOfViolations += 1
 
         return sumOfViolations
 
