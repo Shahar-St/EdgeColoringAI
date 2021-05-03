@@ -1,4 +1,5 @@
 import os
+import random
 
 import numpy as np
 
@@ -47,16 +48,6 @@ class EdgeColoring:
 
         return vec
 
-    def generateSolutionNeighbors(self, vec, numOfColors):
-        maxConflictedVertex = self._getMaxConflictedVertex(vec)
-        neighbors = []
-        for color in range(numOfColors):
-            if color != vec[maxConflictedVertex]:
-                nei = np.copy(vec)
-                nei[maxConflictedVertex] = color
-                neighbors.append(nei)
-
-        return neighbors
 
     def calculateFitness(self, vec):
         sumOfViolations = 0
