@@ -1,5 +1,4 @@
 import os
-import random
 
 import numpy as np
 
@@ -13,7 +12,7 @@ class EdgeColoring:
         edgesAndVertices = lines[0].split(' ')[1:]
         numOfVertices = int(edgesAndVertices[0])
         numOfEdges = int(edgesAndVertices[1])
-        graphMatrix = np.full((numOfEdges, numOfEdges), False)
+        graphMatrix = np.full((numOfVertices, numOfVertices), False)
         for edge in lines[1:]:
             vertices = edge.split(' ')
             graphMatrix[int(vertices[0]) - 1][int(vertices[1]) - 1] = True
@@ -23,26 +22,36 @@ class EdgeColoring:
         print(f'# of edges: {numOfEdges}, # of vertices: {numOfVertices}')
         print(f'Graph density: {((2 * numOfEdges) / (numOfVertices * (numOfVertices - 1))):.6f}')
 
+        maxDeg = 0
+        for i in range(numOfVertices):
+            vertexDeg = sum(graphMatrix[i])
+            if vertexDeg > maxDeg:
+                maxDeg = vertexDeg
+
         self._graphMatrix = graphMatrix
         self._numOfEdges = numOfEdges
         self._numOfVertices = numOfVertices
         self._vertices = np.arange(numOfVertices)
+        self._maxDegree = maxDeg
+        self._maxCliqueSize = self._getMaxCliqueSize(np.copy(graphMatrix), self._numOfVertices)
+
+    def getNeighbors(self, vertex):
+        neighbors = self._graphMatrix[vertex]
+        return np.where(neighbors)[0]
 
     def generateRandomVec(self, numOfColors):
-
         vec1 = np.arange(numOfColors)
-        vec2 = np.random.randint(numOfColors, size=self._numOfVertices-numOfColors)
-        vec = vec1 + vec2
+        vec2 = np.random.randint(numOfColors, size=self._numOfVertices - numOfColors)
+        vec = np.concatenate((vec1, vec2))
         np.random.shuffle(vec)
 
-        return vec.tolist()
-
+        return vec
 
     def calculateFitness(self, vec):
         sumOfViolations = 0
 
-        for j in range(self._numOfVertices):
-            for i in range(self._numOfVertices):
+        for i in range(self._numOfVertices):
+            for j in range(i, self._numOfVertices):
                 if self._graphMatrix[i][j] and vec[i] == vec[j]:
                     sumOfViolations += 1
 
@@ -125,10 +134,46 @@ class EdgeColoring:
 
         return True
 
-    def getNeighbors(self, vertex):
-        neighbors = []
-        for i in range(self._numOfVertices):
-            if self._graphMatrix[vertex][i]:
-                neighbors.append(i)
+    def getNumOfVertices(self):
+        return self._numOfVertices
 
-        return neighbors
+    def getMaxDegree(self):
+        return self._maxDegree
+
+    def getUpperBound(self):
+        return self._maxDegree + 1
+
+    def getLowerBound(self):
+        return self._maxCliqueSize
+
+    def shrinkColors(self, vec):
+        colorsUsed = len(set(vec))
+        if colorsUsed == max(vec) - 1:
+            return vec
+
+        extraColors = set([color for color in vec if color >= colorsUsed])
+        missingColors = [color for color in range(colorsUsed) if color not in vec]
+        colorsMapping = dict(zip(extraColors, missingColors))
+        adjustedVec = [color if color not in extraColors else colorsMapping[color] for color in vec]
+        return adjustedVec
+
+    # greedy algo, (will not always find the largest clique)
+    def _getMaxCliqueSize(self, graphMatrix, verticesLeft):
+        if verticesLeft == 1:
+            return 1
+
+        minDegVer = None
+        minDeg = np.inf
+        for i in range(self._numOfVertices):
+            vertexDeg = sum(graphMatrix[i])
+            if 0 < vertexDeg < minDeg:
+                minDeg = vertexDeg
+                minDegVer = i
+
+        if minDeg == verticesLeft - 1:
+            return minDeg + 1
+
+        for v in range(self._numOfVertices):
+            graphMatrix[minDegVer][v] = graphMatrix[v][minDegVer] = False
+
+        return self._getMaxCliqueSize(graphMatrix, verticesLeft - 1)

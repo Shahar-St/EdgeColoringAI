@@ -1,6 +1,6 @@
 import psutil
 
-GA_POP_SIZE = 3  # ga population size
+GA_POP_SIZE = 30  # ga population size
 GA_MAX_ITER = 200  # maximum iterations
 
 CLOCK_RATE = psutil.cpu_freq().current * (2 ** 20)  # clock ticks per second
@@ -8,7 +8,7 @@ CLOCK_RATE = psutil.cpu_freq().current * (2 ** 20)  # clock ticks per second
 BEST = 0
 X = 0
 Y = 1
-DEFAULT_TARGET = 'test.col'
+DEFAULT_TARGET = 'anna.col'
 
 '''------------------GA-------------------'''
 GA_ELITE_RATE = 0.2  # elitism rate

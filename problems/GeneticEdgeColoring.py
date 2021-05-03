@@ -7,21 +7,20 @@ from problems.EdgeColoring import EdgeColoring
 
 class GeneticEdgeColoring(EdgeColoring):
 
-    def singlePointCrossover(self, parent1, parent2):
-        matingIndex = random.randrange(len(parent1))
+    def crossover(self, parent1, parent2):
+        matingIndex = random.randrange(self._numOfVertices)
         childVec = np.concatenate((parent1[:matingIndex], parent2[matingIndex:]))
-        return childVec
+        return np.array(childVec)
 
     def mutate(self, vec, numOfColors):
-
         for curVertex in range(len(vec)):
             neighbors = self.getNeighbors(curVertex)
-
             i = 0
-            vertexChanged = True
-            while i < len(neighbors) and vertexChanged:
+            vertexChanged = False
+            while i < len(neighbors) and not vertexChanged:
                 if vec[curVertex] == vec[neighbors[i]]:
-                    vec[curVertex] = random.randint(0, numOfColors)
-                    vertexChanged = False
+                    vec[curVertex] = np.random.randint(numOfColors)
+                    vertexChanged = True
+                i += 1
 
-        return vec
+        return np.array(vec)

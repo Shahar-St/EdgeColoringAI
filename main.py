@@ -4,6 +4,7 @@ import traceback
 
 from algorithms.Algorithm import Algorithm
 from problems.EdgeColoring import EdgeColoring
+from problems.GeneticEdgeColoring import GeneticEdgeColoring
 from util.Consts import *
 
 
@@ -26,7 +27,10 @@ def main():
     algoName = args.algo
     popSize = args.popSize
     target = args.target
-    problem = EdgeColoring(args.target)
+    if algoName == 'GeneticAlgorithm':
+        problem = GeneticEdgeColoring(args.target)
+    else:
+        problem = EdgeColoring(args.target)
 
     algo = Algorithm.factory(algoName=algoName,
                              popSize=popSize,
