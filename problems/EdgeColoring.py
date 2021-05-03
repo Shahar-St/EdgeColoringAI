@@ -47,6 +47,17 @@ class EdgeColoring:
 
         return vec
 
+    def generateSolutionNeighbors(self, vec, numOfColors):
+        maxConflictedVertex = self._getMaxConflictedVertex(vec)
+        neighbors = []
+        for color in range(numOfColors):
+            if color != vec[maxConflictedVertex]:
+                nei = np.copy(vec)
+                nei[maxConflictedVertex] = color
+                neighbors.append(nei)
+
+        return neighbors
+
     def calculateFitness(self, vec):
         sumOfViolations = 0
 
@@ -177,3 +188,23 @@ class EdgeColoring:
             graphMatrix[minDegVer][v] = graphMatrix[v][minDegVer] = False
 
         return self._getMaxCliqueSize(graphMatrix, verticesLeft - 1)
+
+    def _getMaxConflictedVertex(self, vec):
+        maxNumConflicts = 0
+        maxConflictedVertex = 0
+        for vertex in range(self._numOfVertices):
+            curNumConflicts = self._getVertexConflicts(vec, vertex)
+            if curNumConflicts > maxNumConflicts:
+                maxNumConflicts = curNumConflicts
+                maxConflictedVertex = vertex
+
+        return maxConflictedVertex
+
+    def _getVertexConflicts(self, vec, vertex):
+        numOfConflicts = 0
+        neighborsList = self.getNeighbors(vertex)
+        for nei in neighborsList:
+            if vec[vertex] == vec[nei]:
+                numOfConflicts += 1
+
+        return numOfConflicts
