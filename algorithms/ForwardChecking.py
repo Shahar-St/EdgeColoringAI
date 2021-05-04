@@ -21,17 +21,24 @@ class ForwardChecking(Algorithm):
                 resVec = np.empty((self._problem.getNumOfVertices()), dtype=int)
                 for vertex, color in solution.items():
                     resVec[vertex] = color
-                return resVec
+
+                numOfSearchedStates = self._numOfSearchedStates
+                self._numOfSearchedStates = 0
+                return resVec, numOfSearchedStates
 
             print(f'Didnt find solution with {domain} colors')
             domain += 1
 
-        return None
+        numOfSearchedStates = self._numOfSearchedStates
+        self._numOfSearchedStates = 0
+        return None, numOfSearchedStates
 
     def _recursiveForwardChecking(self, unassignedVertices, solution, verticesDomains):
+
         if len(unassignedVertices) == 0:
             return True
 
+        self._numOfSearchedStates += 1
         # get variable and value
         vertexToBeAssigned = self._problem.getMostConstraintVariable(unassignedVertices, solution)
         newValue = self._problem.getLeastConstrainingValue(vertexToBeAssigned, solution, verticesDomains)

@@ -14,7 +14,7 @@ GA_MUTATION_RATE = 0.4  # mutation rate
 
 '''------------------DEFAULT_PARSER-------------------'''
 
-DEFAULT_ALGORITHM = 'BackJumping'
+DEFAULT_ALGORITHM = 'FeasibleTabuSearch'
 
 '''------------------ALLOWED_PARSER_NAMES-------------------'''
 

@@ -7,6 +7,7 @@ class Algorithm(ABC):
 
     def __init__(self, problem):
         self._problem = problem
+        self._numOfSearchedStates = 0
 
     # This function should run the algorithm
     @abstractmethod

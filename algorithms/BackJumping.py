@@ -25,11 +25,16 @@ class BackJumping(Algorithm):
                 for vertex, color in solution.items():
                     resVec[vertex] = color
 
-                return resVec
+                numOfSearchedStates = self._numOfSearchedStates
+                self._numOfSearchedStates = 0
+                return resVec, numOfSearchedStates
+
             print(f'Didnt find solution with {domain} colors')
             domain += 1
 
-        return None
+        numOfSearchedStates = self._numOfSearchedStates
+        self._numOfSearchedStates = 0
+        return None, numOfSearchedStates
 
     def _recursiveBackJumping(self, unassignedVertices, solution, conflictSet, verticesDomains):
 
@@ -49,6 +54,8 @@ class BackJumping(Algorithm):
             if newValue is None:
                 foundValue = False
             else:
+                self._numOfSearchedStates += 1
+
                 solution[vertexToBeAssigned] = newValue
                 unassignedVertices.remove(vertexToBeAssigned)
 

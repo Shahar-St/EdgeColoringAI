@@ -28,9 +28,9 @@ def main():
     popSize = args.popSize
     target = args.target
     if algoName == 'GeneticAlgorithm':
-        problem = GeneticEdgeColoring(args.target)
+        problem = GeneticEdgeColoring(target)
     else:
-        problem = EdgeColoring(args.target)
+        problem = EdgeColoring(target)
 
     algo = Algorithm.factory(algoName=algoName,
                              popSize=popSize,
@@ -48,8 +48,9 @@ def main():
         print(f'Population Size: {popSize}')
 
     # find a solution and print it
-    solVec = algo.findSolution(GA_MAX_ITER)
-    print(f'Solution = {problem.translateVec(solVec)}')
+    solVec, numOfStates = algo.findSolution(GA_MAX_ITER)
+    print(f'\nSolution = {problem.translateVec(solVec)}')
+    print(f'Number of searched states: {numOfStates}\n')
 
     # print summery of run
     endTime = time.time()

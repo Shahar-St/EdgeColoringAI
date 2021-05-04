@@ -28,6 +28,7 @@ class GeneticAlgorithm(Algorithm):
              range(self._popSize)])
         self.updateFitness()
         bestSolution = None
+        self._numOfSearchedStates = self._popSize
 
         # iterative improvement
         iterCounter = 0
@@ -46,7 +47,9 @@ class GeneticAlgorithm(Algorithm):
         # clean up
         self._numOfColors = None
         self._citizens = None
-        return bestSolution
+        numOfSearchedStates = self._numOfSearchedStates
+        self._numOfSearchedStates = 0
+        return bestSolution, numOfSearchedStates
 
     def _mate(self):
         # get elite
@@ -67,7 +70,7 @@ class GeneticAlgorithm(Algorithm):
             # mutation factor
             if random.random() < self._mutationRate:
                 newChild.setVec(self._problem.mutate(newChild.getVec(), self._numOfColors))
-
+            self._numOfSearchedStates += 1
             tempPopulation.append(newChild)
 
         self._citizens = np.array(tempPopulation)
@@ -106,13 +109,18 @@ class GeneticAlgorithm(Algorithm):
             genVec = gen.getVec().tolist()
             genVec = self._problem.shrinkColors(genVec)
             i = 0
+            changed = False
             while i < len(genVec):
                 if genVec[i] >= self._numOfColors:
                     genVec[i] = np.random.randint(self._numOfColors)
+                    changed = True
                 i += 1
+            if changed:
+                self._numOfSearchedStates += 1
             gen.setVec(np.array(genVec))
 
         newCitizens = [IndividualEntity(self._problem.generateRandomVec(self._numOfColors)) for _ in
                        range(len(self._citizens) - len(eliteCitizens))]
+        self._numOfSearchedStates += len(self._citizens) - len(eliteCitizens)
         self._citizens = np.array(eliteCitizens + newCitizens)
         self.updateFitness()

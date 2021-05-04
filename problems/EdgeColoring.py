@@ -129,7 +129,6 @@ class EdgeColoring:
         return max(degreePerVer, key=degreePerVer.get)
 
     def getLeastConstrainingValue(self, vertex, currSol, verticesDomains):
-
         tempSol = currSol.copy()
         neighbors = [nei for nei in self.getNeighbors(vertex) if nei not in tempSol]
         leastConstraints = np.inf
@@ -164,6 +163,9 @@ class EdgeColoring:
 
     def getNumOfVertices(self):
         return self._numOfVertices
+
+    def getNumOfEdges(self):
+        return self._numOfEdges
 
     def getMaxDegree(self):
         return self._maxDegree

@@ -1,4 +1,5 @@
 import copy
+import math
 
 from algorithms.Algorithm import Algorithm
 from entities.IndividualEntity import IndividualEntity
@@ -13,9 +14,8 @@ class FeasibleTabuSearch(Algorithm):
         self._tabuList = None
 
     def findSolution(self, maxIter):
-
         # init params
-        self._maxTabuSize = 50
+        self._maxTabuSize = int(math.sqrt(self._problem.getNumOfEdges()))
         self._tabuList = []
 
         numOfColors = self._problem.getUpperBound()
@@ -31,11 +31,14 @@ class FeasibleTabuSearch(Algorithm):
 
         self._maxTabuSize = None
         self._tabuList = None
-        return resVec
+
+        numOfSearchedStates = self._numOfSearchedStates
+        self._numOfSearchedStates = 0
+        return resVec, numOfSearchedStates
 
     def findSolutionWithNumOfColors(self, maxIter, numOfColors):
-
         currentSol = IndividualEntity(self._problem.generateRandomVec(numOfColors))
+        self._numOfSearchedStates += 1
         globalSolution = copy.deepcopy(currentSol)
         globalFitness = self._problem.calculateFitness(currentSol.getVec())
 
@@ -59,6 +62,7 @@ class FeasibleTabuSearch(Algorithm):
     # finding the best neighbor from all neighbors
     def _findBestNeighbor(self, currentSol, numOfColors):
         neighborsVectors = self._problem.generateSolutionNeighbors(currentSol.getVec(), numOfColors)
+        self._numOfSearchedStates += len(neighborsVectors)
         neighbors = [IndividualEntity(vec) for vec in neighborsVectors]
         for i in range(len(neighbors)):
             neighbors[i].setFitness(self._problem.calculateFitness(neighbors[i].getVec()))
