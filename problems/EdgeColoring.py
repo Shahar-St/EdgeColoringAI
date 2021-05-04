@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 
+
 class EdgeColoring:
 
     def __init__(self, fileName):
@@ -217,3 +218,14 @@ class EdgeColoring:
                 numOfConflicts += 1
 
         return numOfConflicts
+
+    def generateSolutionNeighbors(self, vec, numOfColors):
+        maxConflictedVertex = self._getMaxConflictedVertex(vec)
+        neighbors = []
+        for color in range(numOfColors):
+            if color != vec[maxConflictedVertex]:
+                nei = np.copy(vec)
+                nei[maxConflictedVertex] = color
+                neighbors.append(nei)
+
+        return neighbors

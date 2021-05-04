@@ -11,19 +11,21 @@ from util.Consts import BEST
 class GeneticAlgorithm(Algorithm):
 
     def __init__(self, problem, popSize, eliteRate, mutationRate):
-        super().__init__(problem, popSize)
+        super().__init__(problem)
 
-        self._numOfColors = problem.getUpperBound()
-        self._citizens = np.array(
-            [IndividualEntity(problem.generateRandomVec(self._numOfColors)) for _ in
-             range(popSize)])
-
+        self._popSize = popSize
         self._eliteRate = eliteRate
         self._mutationRate = mutationRate
+        self._numOfColors = None
+        self._citizens = None
 
     def findSolution(self, maxIter):
 
-        # init the fitness of the citizens
+        # init the fields
+        self._numOfColors = self._problem.getUpperBound()
+        self._citizens = np.array(
+            [IndividualEntity(self._problem.generateRandomVec(self._numOfColors)) for _ in
+             range(self._popSize)])
         self.updateFitness()
         bestSolution = None
 
@@ -41,6 +43,9 @@ class GeneticAlgorithm(Algorithm):
                 self._adjustPopulationToNewColor(bestSolution)
             iterCounter += 1
 
+        # clean up
+        self._numOfColors = None
+        self._citizens = None
         return bestSolution
 
     def _mate(self):

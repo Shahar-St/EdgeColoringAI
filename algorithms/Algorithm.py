@@ -5,8 +5,7 @@ from abc import ABC, abstractmethod
 # An abstract class that implements and declares common functionality to all algorithms
 class Algorithm(ABC):
 
-    def __init__(self, problem, popSize):
-        self._popSize = popSize
+    def __init__(self, problem):
         self._problem = problem
 
     # This function should run the algorithm
@@ -30,11 +29,13 @@ class Algorithm(ABC):
 
         if algoName == 'BackJumping':
             return algo(
-                problem=problem,
-                popSize=None
+                problem=problem
             )
 
+        if algoName == 'FeasibleTabuSearch':
+            return algo(
+                problem=problem
+            )
 
         else:
             raise Exception('Unknown algorithm')
-

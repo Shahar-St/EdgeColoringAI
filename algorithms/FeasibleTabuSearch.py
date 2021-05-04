@@ -4,16 +4,19 @@ from algorithms.Algorithm import Algorithm
 from entities.IndividualEntity import IndividualEntity
 
 
-class TabuSearchAlgorithm(Algorithm):
+class FeasibleTabuSearch(Algorithm):
 
-    def __init__(self, problem, popSize, maxTabuSize):
-        super().__init__(problem, popSize)
+    def __init__(self, problem):
+        super().__init__(problem)
 
-        self._problem = problem
-        self._maxTabuSize = maxTabuSize
-        self._tabuList = []
+        self._maxTabuSize = None
+        self._tabuList = None
 
     def findSolution(self, maxIter):
+
+        # init params
+        self._maxTabuSize = 50
+        self._tabuList = []
 
         numOfColors = self._problem.getUpperBound()
         fitness = 0
@@ -21,9 +24,12 @@ class TabuSearchAlgorithm(Algorithm):
         while fitness == 0:
             fitness, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
             if fitness == 0:
+                print(f'Found solution with {numOfColors} colors')
                 resVec = curVec
                 numOfColors -= 1
 
+        self._maxTabuSize = None
+        self._tabuList = None
         return resVec
 
     def findSolutionWithNumOfColors(self, maxIter, numOfColors):
@@ -35,7 +41,6 @@ class TabuSearchAlgorithm(Algorithm):
         # iterative improvement
         iterCounter = 0
         while globalFitness != 0 and iterCounter < maxIter:
-
             currentSol = self._findBestNeighbor(currentSol, numOfColors)
             if currentSol is None:
                 return globalFitness, globalSolution.getVec()
@@ -52,7 +57,6 @@ class TabuSearchAlgorithm(Algorithm):
 
     # finding the best neighbor from all neighbors
     def _findBestNeighbor(self, currentSol, numOfColors):
-
         neighborsVectors = self._problem.generateSolutionNeighbors(currentSol.getVec(), numOfColors)
         neighbors = [IndividualEntity(vec) for vec in neighborsVectors]
         for i in range(len(neighbors)):
