@@ -16,8 +16,8 @@ GA_MUTATION_RATE = 0.4  # mutation rate
 
 '''------------------DEFAULT_PARSER-------------------'''
 
-DEFAULT_ALGORITHM = 'GeneticAlgorithm'
+DEFAULT_ALGORITHM = 'BackJumping'
 
 '''------------------ALLOWED_PARSER_NAMES-------------------'''
 
-ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'Backtracking')
+ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping')

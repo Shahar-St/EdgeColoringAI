@@ -28,7 +28,7 @@ class Algorithm(ABC):
                 mutationRate=mutationRate,
             )
 
-        if algoName == 'Backtracking':
+        if algoName == 'BackJumping':
             return algo(
                 problem=problem,
                 popSize=None
