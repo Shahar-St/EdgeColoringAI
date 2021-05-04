@@ -19,9 +19,10 @@ class FeasibleTabuSearch(Algorithm):
         self._tabuList = []
 
         numOfColors = self._problem.getUpperBound()
+        lowerBound = self._problem.getLowerBound()
         fitness = 0
         resVec = []
-        while fitness == 0:
+        while fitness == 0 and numOfColors >= lowerBound:
             fitness, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
             if fitness == 0:
                 print(f'Found solution with {numOfColors} colors')

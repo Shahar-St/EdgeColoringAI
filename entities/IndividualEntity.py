@@ -21,4 +21,4 @@ class IndividualEntity:
         return self._fitness < other.getFitness()
 
     def __eq__(self, other):
-        return self._vec == other.getVec()
+        return (self._vec == other.getVec()).all()
