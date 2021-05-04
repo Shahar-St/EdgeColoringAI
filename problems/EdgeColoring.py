@@ -238,3 +238,27 @@ class EdgeColoring:
                 neighbors.append(nei)
 
         return neighbors
+
+    def generateGreedyVec(self):
+        vertices = self.getVertices()
+        solution = {}
+        for _ in range(self._numOfVertices):
+            vertex = self.getMostConstraintVariable(vertices, solution)
+            color = 0
+            foundColor = False
+            while not foundColor:
+                if self.isValidAssignment(vertex, color, solution):
+                    solution[vertex] = color
+                    foundColor = True
+                    vertices.remove(vertex)
+                else:
+                    color += 1
+
+        return self.convertDictToVec(solution)
+
+    def convertDictToVec(self, solutionDict):
+        resVec = np.empty(self._numOfVertices, dtype=int)
+        for vertex, color in solutionDict.items():
+            resVec[vertex] = color
+
+        return resVec

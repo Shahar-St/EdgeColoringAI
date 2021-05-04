@@ -22,12 +22,19 @@ class GeneticAlgorithm(Algorithm):
     def findSolution(self, maxIter):
 
         # init the fields
-        self._numOfColors = self._problem.getUpperBound()
+        bestSolution = self._problem.generateGreedyVec()
+        greedyColoring = len(set(bestSolution))
+        upperBound = self._problem.getUpperBound()
+        self._numOfColors = min(upperBound, greedyColoring)
+        if greedyColoring <= upperBound:
+            print(f'Saved {upperBound - greedyColoring} runs with a greedy solution')
+        else:
+            bestSolution = self._problem.generateRandomVec(self._numOfColors)
+
         self._citizens = np.array(
             [IndividualEntity(self._problem.generateRandomVec(self._numOfColors)) for _ in
-             range(self._popSize)])
+             range(self._popSize - 1)] + [IndividualEntity(bestSolution)])
         self.updateFitness()
-        bestSolution = None
         self._numOfSearchedStates = self._popSize
 
         # iterative improvement

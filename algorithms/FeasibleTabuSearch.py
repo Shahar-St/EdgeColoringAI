@@ -18,10 +18,18 @@ class FeasibleTabuSearch(Algorithm):
         self._maxTabuSize = int(math.sqrt(self._problem.getNumOfEdges()))
         self._tabuList = []
 
-        numOfColors = self._problem.getUpperBound()
+
         lowerBound = self._problem.getLowerBound()
         fitness = 0
-        resVec = []
+        resVec = self._problem.generateGreedyVec()
+        greedyColoring = len(set(resVec))
+        upperBound = self._problem.getUpperBound()
+        numOfColors = min(upperBound, greedyColoring)
+        if greedyColoring <= upperBound:
+            print(f'Saved {upperBound - greedyColoring} runs with a greedy solution')
+        else:
+            resVec = None
+
         while fitness == 0 and numOfColors >= lowerBound:
             fitness, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
             if fitness == 0:

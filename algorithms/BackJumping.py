@@ -21,9 +21,7 @@ class BackJumping(Algorithm):
             self._recursiveBackJumping(vertices.copy(), solution, copy.deepcopy(conflictSet),
                                        copy.deepcopy(verticesDomains))
             if len(solution) == len(vertices):
-                resVec = np.empty((self._problem.getNumOfVertices()), dtype=int)
-                for vertex, color in solution.items():
-                    resVec[vertex] = color
+                resVec = self._problem.convertDictToVec(solution)
 
                 numOfSearchedStates = self._numOfSearchedStates
                 self._numOfSearchedStates = 0
