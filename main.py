@@ -34,8 +34,6 @@ def main():
 
     algo = Algorithm.factory(algoName=algoName,
                              popSize=popSize,
-                             eliteRate=GA_ELITE_RATE,
-                             mutationRate=GA_MUTATION_RATE,
                              problem=problem
                              )
 

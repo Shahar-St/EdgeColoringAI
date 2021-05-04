@@ -9,13 +9,15 @@ from util.Consts import BEST
 
 
 class GeneticAlgorithm(Algorithm):
+    ELITE_RATE = 0.2  # elitism rate
+    MUTATION_RATE = 0.4  # mutation rate
 
-    def __init__(self, problem, popSize, eliteRate, mutationRate):
+    def __init__(self, problem, popSize):
         super().__init__(problem)
 
         self._popSize = popSize
-        self._eliteRate = eliteRate
-        self._mutationRate = mutationRate
+        self._eliteRate = GeneticAlgorithm.ELITE_RATE
+        self._mutationRate = GeneticAlgorithm.MUTATION_RATE
         self._numOfColors = None
         self._citizens = None
 
