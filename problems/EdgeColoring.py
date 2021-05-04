@@ -14,10 +14,13 @@ class EdgeColoring:
         numOfVertices = int(edgesAndVertices[0])
         numOfEdges = int(edgesAndVertices[1])
         graphMatrix = np.full((numOfVertices, numOfVertices), False)
+        edges = []
         for edge in lines[1:]:
             vertices = edge.split(' ')
-            graphMatrix[int(vertices[0]) - 1][int(vertices[1]) - 1] = True
-            graphMatrix[int(vertices[1]) - 1][int(vertices[0]) - 1] = True
+            vertex1 = int(vertices[0]) - 1
+            vertex2 = int(vertices[1]) - 1
+            graphMatrix[vertex1][vertex2] = graphMatrix[vertex2][vertex1] = True
+            edges.append((vertex1, vertex2))
 
         maxDeg = 0
         for i in range(numOfVertices):
@@ -31,6 +34,7 @@ class EdgeColoring:
         self._vertices = np.arange(numOfVertices)
         self._maxDegree = maxDeg
         self._maxCliqueSize = self._getMaxCliqueSize(np.copy(graphMatrix), self._numOfVertices)
+        self._edges = np.array(edges)
 
         print(f'Input File: {fileName}')
         print(f'# of edges: {numOfEdges}, # of vertices: {numOfVertices}')
@@ -83,6 +87,9 @@ class EdgeColoring:
 
     def getVertices(self):
         return self._vertices.tolist()
+
+    def getEdges(self):
+        return self._edges
 
     def getMostConstraintVariable(self, candidates, currSolution):
         # for MRV

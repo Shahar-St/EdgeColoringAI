@@ -20,5 +20,5 @@ DEFAULT_ALGORITHM = 'BackJumping'
 
 '''------------------ALLOWED_PARSER_NAMES-------------------'''
 
-ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping', 'FeasibleTabuSearch')
+ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping', 'FeasibleTabuSearch', 'ForwardChecking')
 

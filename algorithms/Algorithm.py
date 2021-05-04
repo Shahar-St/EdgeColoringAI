@@ -26,16 +26,6 @@ class Algorithm(ABC):
                 eliteRate=eliteRate,
                 mutationRate=mutationRate,
             )
-
-        if algoName == 'BackJumping':
-            return algo(
-                problem=problem
-            )
-
-        if algoName == 'FeasibleTabuSearch':
-            return algo(
-                problem=problem
-            )
-
         else:
-            raise Exception('Unknown algorithm')
+            return algo(problem=problem)
+
