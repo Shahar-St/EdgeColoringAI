@@ -1,13 +1,11 @@
 import psutil
 
+CLOCK_RATE = psutil.cpu_freq().current * (2 ** 20)  # clock ticks per second
+BEST = 0
+
 GA_POP_SIZE = 30  # ga population size
 GA_MAX_ITER = 200  # maximum iterations
 
-CLOCK_RATE = psutil.cpu_freq().current * (2 ** 20)  # clock ticks per second
-
-BEST = 0
-X = 0
-Y = 1
 DEFAULT_TARGET = 'anna.col'
 
 '''------------------GA-------------------'''
@@ -21,4 +19,3 @@ DEFAULT_ALGORITHM = 'BackJumping'
 '''------------------ALLOWED_PARSER_NAMES-------------------'''
 
 ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping', 'FeasibleTabuSearch', 'ForwardChecking')
-
