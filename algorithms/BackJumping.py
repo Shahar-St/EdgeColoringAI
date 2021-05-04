@@ -21,16 +21,14 @@ class BackJumping(Algorithm):
             self._recursiveBackJumping(vertices.copy(), solution, copy.deepcopy(conflictSet),
                                        copy.deepcopy(verticesDomains))
             if len(solution) == len(vertices):
-                print(f'found sol with {domain} colors')
                 resVec = np.empty((self._problem.getNumOfVertices()), dtype=int)
                 for vertex, color in solution.items():
                     resVec[vertex] = color
 
                 return resVec
-            print(f'Didnt find sol with {domain} colors')
+            print(f'Didnt find solution with {domain} colors')
             domain += 1
 
-        print('failed')
         return None
 
     def _recursiveBackJumping(self, unassignedVertices, solution, conflictSet, verticesDomains):
@@ -80,11 +78,14 @@ class BackJumping(Algorithm):
                 union.remove(vertexToBeAssigned)
                 conflictSet[vertexToBeAssigned] = list(dict.fromkeys(union))
 
-        vertexToJumpTo = conflictSet[vertexToBeAssigned][0]
-        return vertexToJumpTo, vertexToBeAssigned
+        if len(conflictSet[vertexToBeAssigned]) > 0:
+            vertexToJumpTo = conflictSet[vertexToBeAssigned][0]
+            return vertexToJumpTo, vertexToBeAssigned
+
+        return -1, -1
 
     def _hasConflictsWithValue(self, vertex, value, conflictSet, solution):
         for ver in conflictSet[vertex]:
-            if solution[ver] == value:
+            if ver in solution and solution[ver] == value:
                 return True
         return False

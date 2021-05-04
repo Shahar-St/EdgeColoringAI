@@ -42,13 +42,14 @@ def main():
     # declare the run parameters
     print(
         '\nRun parameters:\n'
-        f'Target: {target}\n'
-        f'Algo: {algoName}\n'
+        f'Algorithm: {algoName}\n'
     )
+    if algoName == 'GeneticAlgorithm':
+        print(f'Population Size: {popSize}')
 
     # find a solution and print it
     solVec = algo.findSolution(GA_MAX_ITER)
-    print(f'Solution = {problem.translateVec(solVec)}\n')
+    print(f'Solution = {problem.translateVec(solVec)}')
 
     # print summery of run
     endTime = time.time()

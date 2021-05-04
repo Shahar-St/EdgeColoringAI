@@ -1,12 +1,11 @@
 import os
-import random
 
 import numpy as np
-
 
 class EdgeColoring:
 
     def __init__(self, fileName):
+        print('Initiating input...')
         filePath = os.getcwd() + '\\util\\instances\\' + fileName
         inputFile = open(filePath, 'r')
         lines = [line[2:-1] for line in inputFile.readlines() if not line.startswith('c')]
@@ -19,13 +18,9 @@ class EdgeColoring:
             graphMatrix[int(vertices[0]) - 1][int(vertices[1]) - 1] = True
             graphMatrix[int(vertices[1]) - 1][int(vertices[0]) - 1] = True
 
-        print('Input File:' + fileName)
-        print(f'# of edges: {numOfEdges}, # of vertices: {numOfVertices}')
-        print(f'Graph density: {((2 * numOfEdges) / (numOfVertices * (numOfVertices - 1))):.6f}')
-
         maxDeg = 0
         for i in range(numOfVertices):
-            vertexDeg = sum(graphMatrix[i])
+            vertexDeg = graphMatrix[i].sum()
             if vertexDeg > maxDeg:
                 maxDeg = vertexDeg
 
@@ -35,6 +30,12 @@ class EdgeColoring:
         self._vertices = np.arange(numOfVertices)
         self._maxDegree = maxDeg
         self._maxCliqueSize = self._getMaxCliqueSize(np.copy(graphMatrix), self._numOfVertices)
+
+        print(f'Input File: {fileName}')
+        print(f'# of edges: {numOfEdges}, # of vertices: {numOfVertices}')
+        print(f'Graph density: {((2 * numOfEdges) / (numOfVertices * (numOfVertices - 1))):.6f}')
+        print(f'Lower bound found: {self._maxCliqueSize}')
+        print(f'Upper bound found: {self._maxDegree + 1}')
 
     def getNeighbors(self, vertex):
         neighbors = self._graphMatrix[vertex]
@@ -48,7 +49,6 @@ class EdgeColoring:
 
         return vec
 
-
     def calculateFitness(self, vec):
         sumOfViolations = 0
 
@@ -60,7 +60,25 @@ class EdgeColoring:
         return sumOfViolations
 
     def translateVec(self, vec):
-        return vec
+        if vec is None or self.calculateFitness(vec) != 0:
+            return "Didn't find a valid solution"
+
+        vec = self.shrinkColors(vec)
+        numOfColors = len(set(vec))
+        resStr = f'Number of colors: {numOfColors}.'
+        if numOfColors == self.getLowerBound():
+            resStr += ' This is an OPTIMAL SOLUTION!'
+        resStr += '\nColor Classes:\n'
+
+        for color in range(numOfColors):
+            resStr += f'{color} =>'
+            for vertex, verColor in enumerate(vec):
+                if verColor == color:
+                    resStr += f' {vertex},'
+            resStr = resStr[:-1] + '.'
+            resStr += '\n'
+
+        return resStr
 
     def getVertices(self):
         return self._vertices.tolist()
@@ -167,7 +185,7 @@ class EdgeColoring:
         minDegVer = None
         minDeg = np.inf
         for i in range(self._numOfVertices):
-            vertexDeg = sum(graphMatrix[i])
+            vertexDeg = graphMatrix[i].sum()
             if 0 < vertexDeg < minDeg:
                 minDeg = vertexDeg
                 minDegVer = i
