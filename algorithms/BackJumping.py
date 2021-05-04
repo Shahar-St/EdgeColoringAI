@@ -9,7 +9,6 @@ class BackJumping(Algorithm):
 
     def findSolution(self, maxIter):
         vertices = self._problem.getVertices()
-        numOfVertices = len(vertices)
         conflictSet = {vertex: [] for vertex in vertices}
 
         # num of coloring
@@ -19,7 +18,8 @@ class BackJumping(Algorithm):
 
         while domain <= upperBound:
             verticesDomains = {vertex: list(range(domain)) for vertex in vertices}
-            self._recursiveBackJumping(vertices.copy(), solution, copy.deepcopy(conflictSet), copy.deepcopy(verticesDomains))
+            self._recursiveBackJumping(vertices.copy(), solution, copy.deepcopy(conflictSet),
+                                       copy.deepcopy(verticesDomains))
             if len(solution) == len(vertices):
                 print(f'found sol with {domain} colors')
                 resVec = np.empty((self._problem.getNumOfVertices()), dtype=int)
