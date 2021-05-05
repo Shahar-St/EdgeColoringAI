@@ -18,4 +18,4 @@ DEFAULT_ALGORITHM = 'GeneticAlgorithm'
 
 '''------------------ALLOWED_PARSER_NAMES-------------------'''
 
-ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping', 'FeasibleTabuSearch', 'ForwardChecking')
+ALLOWED_ALGO_NAMES = ('GeneticAlgorithm', 'BackJumping', 'FeasibleTabuSearch', 'ObjectiveMinimizer', 'ForwardChecking')

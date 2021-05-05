@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+from entities.ColorClass import ColorClass
 
 
 class EdgeColoring:
@@ -238,6 +239,22 @@ class EdgeColoring:
                 neighbors.append(nei)
 
         return neighbors
+
+    def calculateObjectiveFunction(self, colorClasses):
+        sumOfSquaredSizes = 0
+        for colorClass in colorClasses:
+            sumOfSquaredSizes += len(colorClass) ** 2
+
+        return sumOfSquaredSizes
+
+    def createColorClasses(self, vec):
+        colorClasses = []
+        colors = list(set(vec))
+        for color in colors:
+            colorClass = ColorClass([vertex for vertex in range(len(vec)) if vec[vertex] == color], color)
+            colorClasses.append(colorClass)
+
+        return colorClasses
 
     def generateGreedyVec(self):
         vertices = self.getVertices()
