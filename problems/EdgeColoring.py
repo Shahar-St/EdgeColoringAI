@@ -279,3 +279,22 @@ class EdgeColoring:
             resVec[vertex] = color
 
         return resVec
+
+    def calculateHybridFitness(self, vec):
+
+        colorClasses = self.createColorClasses(vec)
+        badEdges = {}
+        for colorClass in colorClasses:
+            numOfBadEdges = 0
+            for vertex1, color1 in enumerate(vec):
+                for vertex2, color2 in enumerate(vec[vertex1 + 1:]):
+                    if self._graphMatrix[vertex1][vertex2] and color1 == colorClass.getColor() and color1 == color2:
+                        numOfBadEdges += 1
+            badEdges[colorClass.getColor()] = numOfBadEdges
+
+        sumObjective = self.calculateObjectiveFunction(colorClasses)
+        sumFeasibilityConstraint = 0
+        for colorClass in colorClasses:
+            sumFeasibilityConstraint += 2 * badEdges[colorClass.getColor()] * len(colorClass)
+
+        return sumFeasibilityConstraint - sumObjective

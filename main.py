@@ -13,6 +13,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--algo', default=DEFAULT_ALGORITHM)
+    parser.add_argument('-hb', '--isHybrid', default=DEFAULT_IS_HYBRID)
     parser.add_argument('-ps', '--popSize', type=int, default=GA_POP_SIZE)
     parser.add_argument('-t', '--target', default=DEFAULT_TARGET)
 
@@ -25,6 +26,7 @@ def main():
 
     # get params
     algoName = args.algo
+    isHybrid = args.isHybrid
     popSize = args.popSize
     target = args.target
     if algoName == 'GeneticAlgorithm':
@@ -34,14 +36,17 @@ def main():
 
     algo = Algorithm.factory(algoName=algoName,
                              popSize=popSize,
-                             problem=problem
+                             problem=problem,
+                             isHybrid=isHybrid
                              )
 
     # declare the run parameters
     print(
         '\nRun parameters:\n'
-        f'Algorithm: {algoName}\n'
+        f'Algorithm: {algoName}'
     )
+    if algoName == 'FeasibleTabuSearch':
+        print(f'is hybrid function: {isHybrid}')
     if algoName == 'GeneticAlgorithm':
         print(f'Population Size: {popSize}')
 

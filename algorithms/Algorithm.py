@@ -15,7 +15,7 @@ class Algorithm(ABC):
         raise NotImplementedError
 
     @staticmethod
-    def factory(algoName, popSize, problem):
+    def factory(algoName, popSize, problem, isHybrid):
         module = importlib.import_module('algorithms.' + algoName)
 
         algo = getattr(module, algoName)
@@ -24,6 +24,11 @@ class Algorithm(ABC):
             return algo(
                 problem=problem,
                 popSize=popSize,
+            )
+        elif algoName == 'FeasibleTabuSearch':
+            return algo(
+                problem=problem,
+                isHybrid=isHybrid,
             )
         else:
             return algo(problem=problem)
