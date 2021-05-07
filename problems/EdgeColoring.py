@@ -201,6 +201,9 @@ class EdgeColoring:
                 minDeg = vertexDeg
                 minDegVer = i
 
+        if minDegVer is None:
+            return 1
+
         if minDeg == verticesLeft - 1:
             return minDeg + 1
 
@@ -271,7 +274,7 @@ class EdgeColoring:
                 else:
                     color += 1
 
-        return self.convertDictToVec(solution)
+        return np.array(self.convertDictToVec(solution))
 
     def convertDictToVec(self, solutionDict):
         resVec = np.empty(self._numOfVertices, dtype=int)
@@ -286,9 +289,10 @@ class EdgeColoring:
         badEdges = {}
         for colorClass in colorClasses:
             numOfBadEdges = 0
-            for vertex1, color1 in enumerate(vec):
-                for vertex2, color2 in enumerate(vec[vertex1 + 1:]):
-                    if self._graphMatrix[vertex1][vertex2] and color1 == colorClass.getColor() and color1 == color2:
+            vertices = colorClass.getVertices()
+            for vertex1 in vertices:
+                for vertex2 in vertices[vertex1 + 1:]:
+                    if self._graphMatrix[vertex1][vertex2]:
                         numOfBadEdges += 1
             badEdges[colorClass.getColor()] = numOfBadEdges
 

@@ -5,7 +5,7 @@ from algorithms.Algorithm import Algorithm
 from entities.IndividualEntity import IndividualEntity
 
 
-class FeasibleTabuSearch(Algorithm):
+class TabuSearch(Algorithm):
 
     def __init__(self, problem, isHybrid):
         super().__init__(problem)
@@ -19,7 +19,6 @@ class FeasibleTabuSearch(Algorithm):
         self._maxTabuSize = int(math.sqrt(self._problem.getNumOfEdges()))
         self._tabuList = []
 
-
         lowerBound = self._problem.getLowerBound()
         fitness = 0
         resVec = self._problem.generateGreedyVec()
@@ -31,18 +30,16 @@ class FeasibleTabuSearch(Algorithm):
         else:
             resVec = None
 
-        numOfColors = 138
-
-        tempMaxIter = maxIter
-        i = 0
-        while (self._isHybrid or fitness == 0) and numOfColors > lowerBound and i < tempMaxIter:
-            fitness, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
-            if fitness == 0 or self._isHybrid:
+        iterCount = 0
+        while fitness == 0 and numOfColors >= lowerBound and iterCount < maxIter:
+            _, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
+            fitness = self._problem.calculateFitness(curVec)
+            if fitness == 0:
                 print(f'Found solution with {numOfColors} colors')
                 resVec = curVec
                 numOfColors -= 1
 
-            i += 1
+            iterCount += 1
 
         self._maxTabuSize = None
         self._tabuList = None
@@ -63,7 +60,7 @@ class FeasibleTabuSearch(Algorithm):
 
         # iterative improvement
         iterCounter = 0
-        while (self._isHybrid or globalFitness != 0) != 0 and iterCounter < maxIter:
+        while self._problem.calculateFitness(globalSolution.getVec()) != 0 and iterCounter < maxIter:
             currentSol = self._findBestNeighbor(currentSol, numOfColors)
             if currentSol is None:
                 return globalFitness, globalSolution.getVec()

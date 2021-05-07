@@ -25,7 +25,7 @@ class Algorithm(ABC):
                 problem=problem,
                 popSize=popSize,
             )
-        elif algoName == 'FeasibleTabuSearch':
+        elif algoName == 'TabuSearch':
             return algo(
                 problem=problem,
                 isHybrid=isHybrid,
