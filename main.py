@@ -46,7 +46,7 @@ def main():
         '\nRun parameters:\n'
         f'Algorithm: {algoName}'
     )
-    if algoName == 'FeasibleTabuSearch':
+    if algoName == 'TabuSearch':
         print(f'is hybrid function: {isHybrid}')
     if algoName == 'GeneticAlgorithm':
         print(f'Population Size: {popSize}')

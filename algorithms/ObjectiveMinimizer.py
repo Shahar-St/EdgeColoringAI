@@ -12,11 +12,13 @@ class ObjectiveMinimizer(Algorithm):
         super().__init__(problem)
 
     def findSolution(self, maxIter):
-        currentVec = self._problem.generateRandomVec(138)
+        currentVec = self._problem.generateGreedyVec()
         currentColorClasses = self._problem.createColorClasses(currentVec)
 
         globalColorClasses = copy.deepcopy(currentColorClasses)
         globalObjectiveValue = self._problem.calculateObjectiveFunction(globalColorClasses)
+
+        self._numOfSearchedStates += 1
 
         lowerBound = self._problem.getLowerBound()
         iterCounter = 0
@@ -29,16 +31,17 @@ class ObjectiveMinimizer(Algorithm):
 
             iterCounter += 1
 
-        print(iterCounter)
         vec = self.colorClassToVec(globalColorClasses)
-        return vec, 0
+        numOfSearchedStates = self._numOfSearchedStates
+        self._numOfSearchedStates = 0
+        return vec, numOfSearchedStates
 
     def findNewSolution(self, colorClasses):
-
+        self._numOfSearchedStates += 1
         colorClasses.sort()
 
-        colorToRemoveFrom, colorToAddTo = self.getColorsToInterchange(colorClasses)     # todo it smarter
-        vertex = colorClasses[colorToRemoveFrom].getVertices()[0]                       # todo minimal degree
+        colorToRemoveFrom, colorToAddTo = self.getColorsToInterchange(colorClasses)
+        vertex = self._problem.getMinimumDegVertexFromCandidates(colorClasses[colorToRemoveFrom].getVertices())
         colorClasses[colorToRemoveFrom].removeVertex(vertex)
         colorClasses[colorToAddTo].addVertex(vertex)
 

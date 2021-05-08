@@ -302,3 +302,14 @@ class EdgeColoring:
             sumFeasibilityConstraint += 2 * badEdges[colorClass.getColor()] * len(colorClass)
 
         return sumFeasibilityConstraint - sumObjective
+
+    def getMinimumDegVertexFromCandidates(self, candidates):
+        minDeg = np.inf
+        minVer = None
+
+        for vertex in candidates:
+            deg = self.getNeighbors(vertex).sum()
+            if deg < minDeg:
+                minDeg, minVer = deg, vertex
+
+        return minVer
