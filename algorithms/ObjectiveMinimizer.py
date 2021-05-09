@@ -21,11 +21,15 @@ class ObjectiveMinimizer(Algorithm):
         self._numOfSearchedStates += 1
 
         lowerBound = self._problem.getLowerBound()
+
+        # iterative improvement
         iterCounter = 0
         while iterCounter < maxIter and len(globalColorClasses) > lowerBound:
 
             currentColorClasses = self.findNewSolution(currentColorClasses)
             currentObjectiveValue = self._problem.calculateObjectiveFunction(currentColorClasses)
+
+            # check for best overall solution
             if currentObjectiveValue > globalObjectiveValue:
                 globalObjectiveValue, globalColorClasses = currentObjectiveValue, currentColorClasses
 
@@ -53,22 +57,27 @@ class ObjectiveMinimizer(Algorithm):
 
         return colorClasses
 
+    # find 2 color classes to interchange
     def getColorsToInterchange(self, colorClasses):
 
         y = int(0.2 * len(colorClasses))
         index = random.randint(0, y)
         return index, len(colorClasses) - 1
 
+    # make the 2 color classes a feasible solution
     def kempeChains(self, colorClassForPop, colorClassToAppend, movedVertex):
 
         neighbors = self._problem.getNeighbors(movedVertex)
         verticesOfPop = colorClassForPop.getVertices()
         verticesOfAppend = colorClassToAppend.getVertices()
+
+        # find the intersection between vertices' neighbors and color classes' vertices
         intersection = list(set(verticesOfAppend) & set(neighbors))
 
         iterCount = 0
         while len(intersection) != 0:
 
+            # check if to add vertex from 'colorClassForPop' to 'colorClassToAppend' or vice versa
             if iterCount % 2 == 0:
                 verticesOfPop = verticesOfPop + intersection
             else:
@@ -80,9 +89,10 @@ class ObjectiveMinimizer(Algorithm):
                     verticesOfAppend.remove(vertex)
                 else:
                     verticesOfPop.remove(vertex)
-                # b = self._problem.getNeighbors(vertex)
+
                 neighbors = neighbors + self._problem.getNeighbors(vertex).tolist()
 
+            # find the intersection between vertices' neighbors and color classes' vertices
             if iterCount % 2 == 0:
                 intersection = list(set(verticesOfPop) & set(neighbors))
             else:
@@ -93,7 +103,7 @@ class ObjectiveMinimizer(Algorithm):
 
             iterCount += 1
 
-
+    # translate color class to vector
     def colorClassToVec(self, listColorClasses):
         vec = np.empty(self._problem.getNumOfVertices())
 

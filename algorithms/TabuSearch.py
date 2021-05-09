@@ -30,6 +30,7 @@ class TabuSearch(Algorithm):
         else:
             resVec = None
 
+        # find a feasible solution for k colors, then try to find a feasible solution for k-1 colors
         iterCount = 0
         while fitness == 0 and numOfColors >= lowerBound and iterCount < maxIter:
             _, curVec = self.findSolutionWithNumOfColors(maxIter, numOfColors)
@@ -48,6 +49,7 @@ class TabuSearch(Algorithm):
         self._numOfSearchedStates = 0
         return resVec, numOfSearchedStates
 
+    # find a solution with a fitness function according to input (first approach or hybrid approach)
     def findSolutionWithNumOfColors(self, maxIter, numOfColors):
         currentSol = IndividualEntity(self._problem.generateRandomVec(numOfColors))
         self._numOfSearchedStates += 1

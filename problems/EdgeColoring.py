@@ -54,7 +54,7 @@ class EdgeColoring:
         np.random.shuffle(vec)
 
         return vec
-
+    # calc sum of violations
     def calculateFitness(self, vec):
         sumOfViolations = 0
 
@@ -232,6 +232,7 @@ class EdgeColoring:
 
         return numOfConflicts
 
+    # find neighbors by changing the max conflicted vertex
     def generateSolutionNeighbors(self, vec, numOfColors):
         maxConflictedVertex = self._getMaxConflictedVertex(vec)
         neighbors = []
